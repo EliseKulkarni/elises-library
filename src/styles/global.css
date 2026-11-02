@@ -192,7 +192,12 @@ footer.site { background: var(--paper-2); }
   align-items: start;
   padding-block: 2rem 4.5rem;
 }
-.avatar { width: 6rem; height: 6rem; object-fit: cover; margin-top: 0.3rem; }
+.avatar {
+  width: 6rem; height: 6rem; object-fit: cover; object-position: 50% 30%;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--paper), 0 0 0 4px var(--accent);
+  margin-top: 0.3rem;
+}
 .display { font-size: var(--t-title); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 1rem; }
 .lead { font-size: var(--t-lead); max-width: var(--measure); }
 .note { margin-top: 1rem; font-size: var(--t-small); color: var(--ink-2); max-width: var(--measure); }
