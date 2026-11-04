@@ -1,4 +1,4 @@
-name: Build og publiser bokblogg
+name: Build and publish Elise's Library
 
 on:
   schedule:

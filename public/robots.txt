@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://elisekulkarni.github.io/Bok-blogg/sitemap-index.xml
+Sitemap: https://elisekulkarni.github.io/elises-library/sitemap-index.xml

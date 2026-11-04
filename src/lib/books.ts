@@ -15,7 +15,7 @@ export function tagCounts(books: Book[]): { tag: string; count: number }[] {
   for (const b of books) for (const t of b.data.tags) counts.set(t, (counts.get(t) ?? 0) + 1);
   return [...counts]
     .map(([tag, count]) => ({ tag, count }))
-    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag, "no"));
+    .sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag, "en"));
 }
 
 /** Bøker som deler flest tags med `book` (uten boken selv). */
@@ -36,6 +36,6 @@ export function readingMinutes(markdown: string | undefined): number {
   return Math.max(1, Math.round(words / 220));
 }
 
-export const dateFormatter = new Intl.DateTimeFormat("no-NO", { day: "numeric", month: "short", year: "numeric" });
+export const dateFormatter = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" });
 
 export const displayTitle = (book: Book) => book.data.headline ?? book.data.title;

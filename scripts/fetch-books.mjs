@@ -27,7 +27,7 @@ function loadOverrides() {
 }
 
 // Må matche `base` i astro.config.mjs — bilder i public/ serveres under denne stien.
-const SITE_BASE = "/Bok-blogg/";
+const SITE_BASE = "/elises-library/";
 
 // Markdown-bilder som fortsatt peker på en ekstern http(s)-adresse (typisk Notions
 // midlertidige S3-lenker, som utløper etter 1 time). Ny RegExp per kall — en delt
@@ -225,6 +225,8 @@ async function main() {
       title: override?.title ?? title,
       headline,
       slug: slugify(title),
+      // Nye anmeldelser er på engelsk; eldre norske er merket `language: "no"` i overrides.json.
+      language: override?.language ?? "en",
       rating: props["Rating 1-10"]?.number ?? null,
       status: props["Om fullført"]?.status?.name ?? null,
       essensen: (props.Essensen?.rich_text ?? []).map((t) => t.plain_text).join("") || null,
@@ -271,6 +273,7 @@ async function main() {
       `essensen: ${frontmatterValue(book.essensen)}`,
       `dateAdded: ${frontmatterValue(book.dateAdded)}`,
       `notionId: ${frontmatterValue(book.id)}`,
+      `language: ${frontmatterValue(book.language)}`,
       "---",
       "",
     ].join("\n");

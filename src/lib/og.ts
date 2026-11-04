@@ -2,6 +2,7 @@ import fs from "node:fs";
 import { createRequire } from "node:module";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
+import { SITE_NAME } from "./site";
 
 // Delingsbilder (Open Graph, 1200×630) som tegnes ved bygg — ingen ekstern tjeneste.
 // Vises når en anmeldelse deles på f.eks. Messenger, Slack eller LinkedIn.
@@ -82,11 +83,11 @@ export async function bookImage(book: {
           h("div", { fontSize: headingSize, fontWeight: 600, lineHeight: 1.05, letterSpacing: -1.5 }, heading),
           h("div", { display: "flex", flexWrap: "wrap", fontSize: 32, color: INK }, [
             h("span", { fontStyle: "italic" }, book.title),
-            book.author ? h("span", { whiteSpace: "pre" }, ` av ${book.author}`) : null,
+            book.author ? h("span", { whiteSpace: "pre" }, ` by ${book.author}`) : null,
           ].filter(Boolean)),
         ]),
         h("div", { display: "flex", justifyContent: "space-between", alignItems: "flex-end" }, [
-          footer("Bokblogg"),
+          footer(SITE_NAME),
           book.rating !== null
             ? h("div", { display: "flex", alignItems: "baseline", fontSize: 30, color: INK_2 }, [
                 h("span", { fontSize: 88, fontWeight: 600, color: INK, lineHeight: 1 }, String(book.rating)),
@@ -105,10 +106,10 @@ export async function siteImage(covers: (string | null)[]): Promise<Buffer> {
     h("div", { width: 1200, height: 630, display: "flex", background: PAPER, color: INK, fontFamily: "Newsreader", padding: 64, gap: 48 }, [
       h("div", { display: "flex", flexDirection: "column", justifyContent: "space-between", width: 540, height: 502 }, [
         h("div", { display: "flex", flexDirection: "column", gap: 24 }, [
-          h("div", { fontSize: 84, fontWeight: 600, letterSpacing: -2, lineHeight: 1 }, "Bokblogg"),
-          h("div", { fontSize: 34, lineHeight: 1.3 }, "Korte, ærlige anmeldelser av bøker om læring, vaner og selvinnsikt."),
+          h("div", { fontSize: 84, fontWeight: 600, letterSpacing: -2, lineHeight: 1 }, SITE_NAME),
+          h("div", { fontSize: 34, lineHeight: 1.3 }, "Short, honest reviews of books about learning, habits and self-understanding."),
         ]),
-        footer("elisekulkarni.github.io/Bok-blogg"),
+        footer("elisekulkarni.github.io/elises-library"),
       ]),
       h("div", { display: "flex", gap: 24, alignItems: "center", width: 484, height: 502 }, loaded.map((src, i) =>
         h("img", { width: 145, height: 218, objectFit: "cover", marginTop: i % 2 ? 70 : -70 }, undefined, { src, width: 145, height: 218 })

@@ -15,6 +15,7 @@ const books = defineCollection({
     essensen: z.string().nullable(),
     dateAdded: z.coerce.date(),
     notionId: z.string(),
+    language: z.string().default("en"),
   }),
 });
 

@@ -4,6 +4,7 @@ import BookCard from "../../components/BookCard.astro";
 import { render } from "astro:content";
 import { slugify } from "../../lib/slug";
 import { getBooks, relatedBooks, readingMinutes, dateFormatter, displayTitle, type Book } from "../../lib/books";
+import { SITE_NAME } from "../../lib/site";
 
 export async function getStaticPaths() {
   const books = await getBooks();
@@ -24,8 +25,8 @@ interface Props {
 const { book, newer, older, related } = Astro.props;
 const { Content } = await render(book);
 const base = import.meta.env.BASE_URL;
-const { title, author, rating, coverUrl, essensen, tags, status, dateAdded } = book.data;
-const description = essensen ?? `Anmeldelse av ${title}${author ? ` av ${author}` : ""}`;
+const { title, author, rating, coverUrl, essensen, tags, status, dateAdded, language } = book.data;
+const description = essensen ?? `Review of ${title}${author ? ` by ${author}` : ""}`;
 const minutes = readingMinutes(book.body);
 const pageURL = new URL(Astro.url.pathname, Astro.site).href;
 // Biblioteksøk søker i katalogene til norske bibliotek og viser hvor boken kan lånes.
@@ -39,7 +40,7 @@ const reviewData = {
   name: displayTitle(book),
   url: pageURL,
   datePublished: dateAdded.toISOString(),
-  inLanguage: "no",
+  inLanguage: language,
   description,
   author: { "@type": "Person", name: "Elise Kulkarni" },
   itemReviewed: {
@@ -54,21 +55,21 @@ const reviewData = {
 };
 ---
 <Layout
-  title={`${displayTitle(book)} — Bokblogg`}
+  title={`${displayTitle(book)} — ${SITE_NAME}`}
   description={description}
   image={new URL(`${base}og/${book.id}.png`, Astro.site).href}
   type="article"
   publishedTime={dateAdded.toISOString()}
   structuredData={reviewData}
 >
-  <nav class="crumbs" aria-label="Brødsmuler">
-    <a href={base}>&larr; Alle bøkene</a>
+  <nav class="crumbs" aria-label="Breadcrumbs">
+    <a href={base}>&larr; All books</a>
   </nav>
 
   <header class="book-head">
     <div class="book-cover">
       {coverUrl ? (
-        <img src={coverUrl} alt={`Omslaget til ${title}`} width="240" height="360" fetchpriority="high" />
+        <img src={coverUrl} alt={`Cover of ${title}`} width="240" height="360" fetchpriority="high" />
       ) : (
         <span class="cover-blank" aria-hidden="true">{title}</span>
       )}
@@ -76,15 +77,16 @@ const reviewData = {
     <div class="book-head-text">
       <h1 class="book-title">{displayTitle(book)}</h1>
       <p class="book-of">
-        Om <cite>{title}</cite>{author && <> av {author}</>}
+        About <cite>{title}</cite>{author && <> by {author}</>}
       </p>
       <dl class="book-facts">
         {rating !== null && (
-          <div><dt>Karakter</dt><dd><strong class="score">{rating}</strong>/10</dd></div>
+          <div><dt>Rating</dt><dd><strong class="score">{rating}</strong>/10</dd></div>
         )}
-        <div><dt>Publisert</dt><dd><time datetime={dateAdded.toISOString()}>{dateFormatter.format(dateAdded)}</time></dd></div>
-        <div><dt>Lesetid</dt><dd>{minutes} min</dd></div>
-        {status === "80%" && <div><dt>Status</dt><dd>Nesten ferdig lest</dd></div>}
+        <div><dt>Published</dt><dd><time datetime={dateAdded.toISOString()}>{dateFormatter.format(dateAdded)}</time></dd></div>
+        <div><dt>Reading time</dt><dd>{minutes} min</dd></div>
+        {language === "no" && <div><dt>Language</dt><dd>Norwegian</dd></div>}
+        {status === "80%" && <div><dt>Status</dt><dd>Almost finished</dd></div>}
       </dl>
       {tags.length > 0 && (
         <p class="book-tags">
@@ -96,21 +98,21 @@ const reviewData = {
 
   <div class="reading">
     {essensen && (
-      <p class="essence"><strong>Essensen:</strong> {essensen}</p>
+      <p class="essence"><strong>The essence:</strong> <span lang={language}>{essensen}</span></p>
     )}
 
-    <article class="prose">
+    <article class="prose" lang={language}>
       <Content />
     </article>
 
     <p class="borrow">
-      Lyst til å lese den? <a href={libraryURL} rel="noopener">Se hvilke bibliotek som har den</a>
+      Want to read it? <a href={libraryURL} rel="noopener">Find it in Norwegian libraries</a>
     </p>
   </div>
 
   {related.length > 0 && (
     <section class="related" aria-labelledby="related-heading">
-      <h2 id="related-heading" class="section-title">Les også</h2>
+      <h2 id="related-heading" class="section-title">Read next</h2>
       <ul class="shelf-grid">
         {related.map((b) => <BookCard book={b} />)}
       </ul>
@@ -118,16 +120,16 @@ const reviewData = {
   )}
 
   {(newer || older) && (
-    <nav class="pager" aria-label="Flere anmeldelser">
+    <nav class="pager" aria-label="More reviews">
       {older ? (
-        <a class="pager-link" href={`${base}bok/${older.id}/`} rel="prev">
-          <span class="pager-dir">&larr; Eldre</span>
+        <a class="pager-link" href={`${base}book/${older.id}/`} rel="prev">
+          <span class="pager-dir">&larr; Older</span>
           <span class="pager-title">{displayTitle(older)}</span>
         </a>
       ) : <span />}
       {newer && (
-        <a class="pager-link next" href={`${base}bok/${newer.id}/`} rel="next">
-          <span class="pager-dir">Nyere &rarr;</span>
+        <a class="pager-link next" href={`${base}book/${newer.id}/`} rel="next">
+          <span class="pager-dir">Newer &rarr;</span>
           <span class="pager-title">{displayTitle(newer)}</span>
         </a>
       )}

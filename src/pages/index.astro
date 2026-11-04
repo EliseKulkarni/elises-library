@@ -2,13 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 import BookCard from "../components/BookCard.astro";
 import { getBooks, tagCounts, displayTitle, readingMinutes } from "../lib/books";
+import { SITE_NAME } from "../lib/site";
 
 const books = await getBooks();
 const base = import.meta.env.BASE_URL;
 
 const ratedBooks = books.filter((b) => b.data.rating !== null);
 const avgRating = ratedBooks.length
-  ? (ratedBooks.reduce((sum, b) => sum + (b.data.rating ?? 0), 0) / ratedBooks.length).toFixed(1).replace(".", ",")
+  ? (ratedBooks.reduce((sum, b) => sum + (b.data.rating ?? 0), 0) / ratedBooks.length).toFixed(1)
   : null;
 const favourites = ratedBooks.filter((b) => b.data.rating === 10).length;
 
@@ -19,31 +20,31 @@ const tags = (shared.length >= 3 ? shared : allTags).slice(0, 10);
 
 const latest = books[0];
 ---
-<Layout title="Bokblogg — bokanmeldelser">
+<Layout title={`${SITE_NAME} — book reviews`}>
   <section class="hero">
     <img class="avatar" src={`${base}avatar.jpg`} alt="Elise" width="160" height="160" fetchpriority="high" />
     <div class="hero-text">
-      <h2 class="display">Hei, jeg er Elise.</h2>
+      <h2 class="display">Hi, I’m Elise.</h2>
       <p class="lead">
-        Jeg er student og leser mye — mest sakprosa om læring, vaner og det å
-        forstå seg selv litt bedre. Her samler jeg korte, ærlige anmeldelser av
-        bøkene jeg leser, automatisk hentet fra notatene mine i Notion.
+        I’m a student who reads a lot, mostly non-fiction about learning, habits
+        and understanding myself a little better. This is where I collect short,
+        honest reviews of the books I read, pulled automatically from my notes in Notion.
       </p>
       <p class="note">
-        PS: de første anmeldelsene er skrevet litt raskt og delvis AI-oppsummert. Blir bedre etter hvert!
+        PS: most of the earliest reviews are in Norwegian, written quickly and partly summarized by AI. New ones are in English, and they’ll get better!
       </p>
       <p class="tally">
-        <span><strong>{books.length}</strong> {books.length === 1 ? "bok" : "bøker"}</span>
-        {avgRating && <span><strong>{avgRating}</strong> i snitt</span>}
-        {favourites > 0 && <span><strong>{favourites}</strong> til full pott</span>}
+        <span><strong>{books.length}</strong> {books.length === 1 ? "book" : "books"}</span>
+        {avgRating && <span><strong>{avgRating}</strong> average</span>}
+        {favourites > 0 && <span><strong>{favourites}</strong> {favourites === 1 ? "perfect 10" : "perfect 10s"}</span>}
       </p>
     </div>
   </section>
 
   {latest && (
     <section class="feature" aria-labelledby="feature-heading">
-      <h2 id="feature-heading" class="section-title feature-heading">Nyeste anmeldelse</h2>
-      <a class="feature-cover" href={`${base}bok/${latest.id}/`} tabindex="-1" aria-hidden="true">
+      <h2 id="feature-heading" class="section-title feature-heading">Latest review</h2>
+      <a class="feature-cover" href={`${base}book/${latest.id}/`} tabindex="-1" aria-hidden="true">
         {latest.data.coverUrl ? (
           <img src={latest.data.coverUrl} alt="" width="240" height="360" />
         ) : (
@@ -52,15 +53,15 @@ const latest = books[0];
       </a>
       <div class="feature-text">
         <h3 class="feature-title">
-          <a href={`${base}bok/${latest.id}/`}>{displayTitle(latest)}</a>
+          <a href={`${base}book/${latest.id}/`}>{displayTitle(latest)}</a>
         </h3>
         <p class="feature-book">
-          <cite>{latest.data.title}</cite>{latest.data.author && <> av {latest.data.author}</>}
+          <cite>{latest.data.title}</cite>{latest.data.author && <> by {latest.data.author}</>}
           {latest.data.rating !== null && <> — <strong>{latest.data.rating}/10</strong></>}
         </p>
-        {latest.data.essensen && <p class="feature-essence">{latest.data.essensen}</p>}
-        <a class="action" href={`${base}bok/${latest.id}/`}>
-          Les anmeldelsen <span class="action-meta">({readingMinutes(latest.body)} min)</span>
+        {latest.data.essensen && <p class="feature-essence" lang={latest.data.language}>{latest.data.essensen}</p>}
+        <a class="action" href={`${base}book/${latest.id}/`}>
+          Read the review <span class="action-meta">({readingMinutes(latest.body)} min)</span>
         </a>
       </div>
     </section>
@@ -68,42 +69,42 @@ const latest = books[0];
 
   <section class="shelf" aria-labelledby="shelf-title">
     <div class="shelf-head">
-      <h2 id="shelf-title" class="section-title">Alle bøkene</h2>
+      <h2 id="shelf-title" class="section-title">All books</h2>
       <div class="shelf-controls">
         <label class="search">
-          <span class="sr-only">Søk i bøker</span>
+          <span class="sr-only">Search books</span>
           <input
             type="search"
             id="book-search"
             name="q"
-            placeholder="Søk i titler, forfattere og temaer…"
+            placeholder="Search titles, authors and topics…"
             autocomplete="off"
             spellcheck="false"
           />
         </label>
-        <div class="sort" role="group" aria-label="Sorter">
-          <button type="button" class="text-btn" data-sort="date" aria-pressed="true">Nyeste</button>
-          <button type="button" class="text-btn" data-sort="rating" aria-pressed="false">Best likt</button>
+        <div class="sort" role="group" aria-label="Sort">
+          <button type="button" class="text-btn" data-sort="date" aria-pressed="true">Newest</button>
+          <button type="button" class="text-btn" data-sort="rating" aria-pressed="false">Top rated</button>
         </div>
       </div>
     </div>
 
     {tags.length > 0 && (
-      <div class="themes" role="group" aria-label="Filtrer på tema">
-        <span class="themes-label">Tema:</span>
-        <button type="button" class="text-btn" data-tag="" aria-pressed="true">alle</button>
+      <div class="themes" role="group" aria-label="Filter by topic">
+        <span class="themes-label">Topic:</span>
+        <button type="button" class="text-btn" data-tag="" aria-pressed="true">all</button>
         {tags.map(({ tag, count }) => (
           <button type="button" class="text-btn" data-tag={tag.toLowerCase()} aria-pressed="false">
             {tag}<span class="count">{count}</span>
           </button>
         ))}
-        {allTags.length > tags.length && <a class="themes-more" href={`${base}tag/`}>alle {allTags.length} temaer</a>}
+        {allTags.length > tags.length && <a class="themes-more" href={`${base}tag/`}>all {allTags.length} topics</a>}
       </div>
     )}
 
     <p id="result-count" class="result-count" aria-live="polite"></p>
     <p id="empty-state" class="empty-state" hidden>
-      Ingen bøker passer søket. <button type="button" id="reset-filters" class="text-btn is-link">Vis alle bøkene</button>
+      No books match your search. <button type="button" id="reset-filters" class="text-btn is-link">Show all books</button>
     </p>
 
     <ul class="shelf-grid" id="book-grid">
@@ -164,7 +165,7 @@ const latest = books[0];
     }
 
     emptyState.hidden = visible !== 0;
-    resultCount.textContent = (q || activeTag) && visible > 0 ? `${visible} av ${items.length} bøker` : "";
+    resultCount.textContent = (q || activeTag) && visible > 0 ? `${visible} of ${items.length} books` : "";
     syncUrl();
   }
 

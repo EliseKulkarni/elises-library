@@ -1,85 +1,86 @@
-# bokblogg
+# Elise's Library
 
-Statisk bokblogg som henter bokanmeldelser fra Notion og bygger seg selv på schedule.
+A static book blog that pulls reviews from Notion and rebuilds itself on a schedule.
 
-Live: https://elisekulkarni.github.io/Bok-blogg/
+Live: https://elisekulkarni.github.io/elises-library/
 
 ## Stack
 
-- [Astro](https://astro.build) + TypeScript — statisk site-generator
-- Notion som CMS (`@notionhq/client` + `notion-to-md`) — ingen database, ingen backend
-- Open Library API — henter forfatter/sjanger automatisk basert på boktittel
-- GitHub Actions (bygg på schedule) + GitHub Pages (hosting)
+- [Astro](https://astro.build) + TypeScript: static site generator
+- Notion as the CMS (`@notionhq/client` + `notion-to-md`): no database, no backend
+- Open Library API: looks up author and genre from the book title
+- GitHub Actions (scheduled builds) + GitHub Pages (hosting)
 
-## Hvordan det henger sammen
+## How it fits together
 
-1. Du skriver en anmeldelse i Notion, markerer boken som `Ja` (ferdig) eller `80%` (nesten ferdig, har skrevet oppsummering)
-2. GitHub Actions kjører automatisk hver dag (`.github/workflows/build-and-deploy.yml`), henter alle bøker med den statusen fra Notion, slår opp forfatter/sjanger, konverterer anmeldelsen til markdown, bygger Astro-siden, og publiserer til GitHub Pages
-3. `data/books-cache.json` og `data/openlibrary-cache.json` committes automatisk tilbake til repoet av Action-en — dette gjør at neste kjøring bare trenger å reprosessere bøker som faktisk er endret (basert på Notion sin `last_edited_time`), i stedet for å gjøre alt arbeidet på nytt hver gang
+1. Write a review in Notion and mark the book `Ja` (finished) or `80%` (almost finished, summary written)
+2. GitHub Actions runs every day (`.github/workflows/build-and-deploy.yml`). It fetches all books with those statuses from Notion, looks up author and genre, converts the review to Markdown, builds the Astro site and publishes it to GitHub Pages
+3. The Action commits `data/books-cache.json` and `data/openlibrary-cache.json` back to the repo, so the next run only reprocesses books that actually changed (based on Notion's `last_edited_time`)
 
-## Kjøre lokalt
+## Running locally
 
-Krever [Node.js](https://nodejs.org) (LTS eller nyere).
+Requires [Node.js](https://nodejs.org) (LTS or newer).
 
 ```bash
 npm install
 ```
 
-Lag en `.env`-fil (kopier `.env.example`) med din egen Notion-integrasjonstoken:
+Create a `.env` file (copy `.env.example`) with your own Notion integration token:
 
 ```
 NOTION_TOKEN=ntn_...
 NOTION_DATA_SOURCE_ID=29c9ef86-0d22-80e5-ab67-000b2fa83c62
 ```
 
-Hent bøker fra Notion og generer innhold:
+Fetch books from Notion and generate the content:
 
 ```bash
 npm run fetch:books
 ```
 
-Start lokal dev-server:
+Start the local dev server:
 
 ```bash
 npm run dev
 ```
 
-Bygg produksjonsversjon:
+Build the production version:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Secrets i GitHub Actions
+## Secrets in GitHub Actions
 
-Under repoets **Settings → Secrets and variables → Actions**:
+```bash
+gh secret set NOTION_TOKEN
+gh variable set NOTION_DATA_SOURCE_ID --body 29c9ef86-0d22-80e5-ab67-000b2fa83c62
+```
 
-- **Secrets-fanen** → **New repository secret** → `NOTION_TOKEN` = din Notion-integrasjonstoken (hemmelig, samme som i `.env` lokalt)
-- **Variables-fanen** → **New repository variable** → `NOTION_DATA_SOURCE_ID` = `29c9ef86-0d22-80e5-ab67-000b2fa83c62` (ikke hemmelig i seg selv — brukes som variabel, ikke secret)
+GitHub Pages must use **GitHub Actions** as its source (not "Deploy from a branch").
 
-Under **Settings → Pages**: sett **Source** til **GitHub Actions** (ikke "Deploy from a branch").
+## Adding more books
 
-## Legge til flere bøker
+Nothing to do here: write the review in Notion and set the status to `Ja` or `80%`. The site updates within 24 hours, or right away if you run `gh workflow run build-and-deploy.yml`.
 
-Ingenting — bare skriv anmeldelsen i Notion og sett status til `Ja` eller `80%`. Siden oppdaterer seg selv innen 24 timer, eller umiddelbart hvis du trigger workflowen manuelt fra **Actions**-fanen på GitHub (**Run workflow**-knappen).
+New reviews are treated as English. An older Norwegian review has `"language": "no"` in `data/overrides.json`, which labels it on the page and lets browsers offer translation.
 
-## Rette opp tittel, omslag, forfatter eller tags
+## Fixing a title, cover, author or tags
 
-Open Library gjetter av og til feil (feil utgave av omslaget, rotete tags osv.). Rett det i
-`data/overrides.json`, med Notion-sidens ID som nøkkel:
+Open Library sometimes guesses wrong (the wrong edition's cover, messy tags and so on). Fix it in `data/overrides.json`, using the Notion page ID as the key:
 
 ```json
 "3e19ef86-0d22-8056-87d1-db101376a8fa": {
   "title": "The Most Important Thing",
   "author": "Howard Marks",
-  "headline": "En god idé, sagt ti ganger",
+  "headline": "One good idea, said ten times",
   "coverUrl": "https://covers.openlibrary.org/b/id/10001222-M.jpg",
-  "tags": ["Investering", "Risiko"]
+  "tags": ["Investing", "Risk"],
+  "language": "no"
 }
 ```
 
-Alle felt er valgfrie — bare de du fyller inn overstyrer. `title` endrer bare hva som vises;
-nettadressen (slug-en) bygges fortsatt fra Notion-tittelen, så gamle lenker fortsetter å virke.
+All fields are optional, and only the ones you fill in override anything. `title` only changes what is displayed; the page address (the slug) is still built from the Notion title, so existing links keep working.
 
-Prøv å gjenbruke tags som allerede finnes (se `/tag/` på siden), så samles bøker om samme tema.
+Try to reuse existing tags (see `/tag/` on the site) so books on the same topic are grouped together.

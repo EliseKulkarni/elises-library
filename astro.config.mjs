@@ -4,6 +4,6 @@ import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
   site: "https://elisekulkarni.github.io",
-  base: "/Bok-blogg/",
+  base: "/elises-library/",
   integrations: [sitemap()],
 });

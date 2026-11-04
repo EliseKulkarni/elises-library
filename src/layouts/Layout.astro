@@ -2,6 +2,7 @@
 import "@fontsource-variable/newsreader/opsz.css";
 import "@fontsource-variable/newsreader/opsz-italic.css";
 import "../styles/global.css";
+import { SITE_NAME } from "../lib/site";
 
 interface Props {
   title: string;
@@ -17,7 +18,7 @@ interface Props {
 
 const {
   title,
-  description = "Bokblogg av Elise Kulkarni – korte, ærlige anmeldelser av bøker om læring, vaner og selvinnsikt.",
+  description = `${SITE_NAME} by Elise Kulkarni: short, honest reviews of books about learning, habits and self-understanding.`,
   image,
   narrow = false,
   type = "website",
@@ -37,14 +38,14 @@ const path = Astro.url.pathname;
 const blogData = {
   "@context": "https://schema.org",
   "@type": "Blog",
-  name: "Bokblogg",
+  name: SITE_NAME,
   url: siteURL,
-  inLanguage: "no",
+  inLanguage: "en",
   author: { "@type": "Person", name: "Elise Kulkarni", url: siteURL },
 };
 ---
 <!doctype html>
-<html lang="no">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -52,13 +53,13 @@ const blogData = {
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" type="application/rss+xml" title="Elise sin bokblogg" href={new URL(`${base}rss.xml`, Astro.site).href} />
+    <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href={new URL(`${base}rss.xml`, Astro.site).href} />
     <meta name="theme-color" content="#f7f7f4" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#141513" media="(prefers-color-scheme: dark)" />
 
     <meta property="og:type" content={type} />
-    <meta property="og:site_name" content="Bokblogg" />
-    <meta property="og:locale" content="nb_NO" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="en_GB" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
@@ -77,34 +78,34 @@ const blogData = {
     {pageData && <script type="application/ld+json" set:html={JSON.stringify(pageData)} />}
   </head>
   <body>
-    <a class="skip-link" href="#innhold">Hopp til innhold</a>
+    <a class="skip-link" href="#content">Skip to content</a>
     <header class="site">
       {isHome ? (
-        <h1 class="site-title"><a href={base}>Bokblogg</a></h1>
+        <h1 class="site-title"><a href={base}>{SITE_NAME}</a></h1>
       ) : (
-        <p class="site-title"><a href={base}>Bokblogg</a></p>
+        <p class="site-title"><a href={base}>{SITE_NAME}</a></p>
       )}
-      <nav class="site-nav" aria-label="Hovedmeny">
-        <a href={base} aria-current={isHome ? "page" : undefined}>Bøker</a>
-        <a href={`${base}tag/`} aria-current={path.startsWith(`${base}tag/`) ? "page" : undefined}>Temaer</a>
-        <a href={`${base}om/`} aria-current={path.startsWith(`${base}om`) ? "page" : undefined}>Om</a>
-        <a href={`${base}rss.xml`} title="Følg via RSS">RSS</a>
+      <nav class="site-nav" aria-label="Main menu">
+        <a href={base} aria-current={isHome ? "page" : undefined}>Books</a>
+        <a href={`${base}tag/`} aria-current={path.startsWith(`${base}tag/`) ? "page" : undefined}>Topics</a>
+        <a href={`${base}about/`} aria-current={path.startsWith(`${base}about`) ? "page" : undefined}>About</a>
+        <a href={`${base}rss.xml`} title="Follow via RSS">RSS</a>
       </nav>
     </header>
-    <main id="innhold" class:list={{ narrow }}>
+    <main id="content" class:list={{ narrow }}>
       <slot />
     </main>
     <footer class="site">
       <div class="footer-inner">
         <div class="follow">
-          <p class="follow-title">Få beskjed om nye bøker</p>
+          <p class="follow-title">Get notified about new books</p>
           <p>
-            Lim inn <a href={`${base}rss.xml`}>RSS-adressen</a> i en RSS-leser
-            (f.eks. Feedly, NetNewsWire eller Thunderbird), så dukker nye
-            anmeldelser opp der automatisk.
+            Paste the <a href={`${base}rss.xml`}>RSS address</a> into an RSS reader
+            (such as Feedly, NetNewsWire or Thunderbird), and new reviews will
+            show up there automatically.
           </p>
         </div>
-        <p class="byline">Skrevet av Elise Kulkarni</p>
+        <p class="byline">Written by Elise Kulkarni</p>
       </div>
     </footer>
   </body>

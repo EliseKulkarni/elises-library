@@ -1,78 +1,86 @@
 {
   "1e29ef86-0d22-80c7-8c44-c23382f97968": {
     "title": "ROAR",
-    "headline": "Kvinner er ikke små menn",
+    "headline": "Women are not small men",
     "tags": [
-      "Helse",
-      "Trening",
-      "Kvinnehelse"
+      "Health",
+      "Training",
+      "Women’s health"
     ]
   },
   "2c59ef86-0d22-80c5-ac15-f0d5e4068268": {
-    "headline": "Hva om livet er en maskin?",
+    "language": "no",
+    "headline": "What if life is a machine?",
     "tags": [
-      "Selvutvikling",
-      "Beslutninger",
-      "Investering"
+      "Self-improvement",
+      "Decision-making",
+      "Investing"
     ]
   },
   "3539ef86-0d22-809f-84b9-df90d65e07b0": {
-    "headline": "Frihet er å kunne si nei til seg selv",
+    "language": "no",
+    "headline": "Freedom is being able to say no to yourself",
     "coverUrl": "https://covers.openlibrary.org/b/id/12996579-M.jpg",
     "tags": [
-      "Selvutvikling",
-      "Vaner",
-      "Filosofi"
+      "Self-improvement",
+      "Habits",
+      "Philosophy"
     ]
   },
   "3639ef86-0d22-8054-acb0-efba6f86aa22": {
+    "language": "no",
     "title": "The Art of Thinking in Graphs",
-    "headline": "Ideer du kan se",
+    "headline": "Ideas you can see",
     "coverUrl": "https://res.cloudinary.com/bloomsbury-atlas/image/upload/w_360,c_scale,dpr_1.5/jackets/9789369523016.jpg",
     "tags": [
-      "Tenkning",
-      "Visualisering"
+      "Thinking",
+      "Visualization"
     ]
   },
   "3729ef86-0d22-8051-946b-ebeef1db933c": {
+    "language": "no",
     "title": "The Charisma Myth",
-    "headline": "Vær interessert, ikke interessant",
+    "headline": "Be interested, not interesting",
     "tags": [
-      "Kommunikasjon",
-      "Psykologi",
-      "Selvutvikling"
+      "Communication",
+      "Psychology",
+      "Self-improvement"
     ]
   },
   "37d9ef86-0d22-80fa-8a31-f90e9f7c071d": {
+    "language": "no",
     "title": "A Mind for Numbers",
-    "headline": "Vi må veksle mellom focused mode og diffuse mode",
+    "headline": "We need to switch between focused mode and diffuse mode",
     "tags": [
-      "Læring",
-      "Studieteknikk",
-      "Psykologi"
+      "Learning",
+      "Study skills",
+      "Psychology"
     ]
   },
   "3c89ef86-0d22-80ab-a9ee-ef15c9d8f0be": {
-    "headline": "Du kan ikke være glad hele tiden",
+    "language": "no",
+    "headline": "You can’t be happy all the time",
     "tags": [
-      "Psykologi",
-      "Mental helse",
-      "Selvutvikling"
+      "Psychology",
+      "Mental health",
+      "Self-improvement"
     ]
   },
   "3e19ef86-0d22-8056-87d1-db101376a8fa": {
-    "headline": "En god idé, sagt ti ganger",
+    "language": "no",
+    "headline": "One good idea, said ten times",
     "tags": [
-      "Investering",
-      "Risiko",
-      "Beslutninger"
+      "Investing",
+      "Risk",
+      "Decision-making"
     ]
   },
   "4019ef86-0d22-8071-881c-df88053e660b": {
-    "headline": "Hvordan spille deg selv god",
+    "language": "no",
+    "headline": "How to be on your own side",
     "tags": [
-      "Selvutvikling",
-      "Psykologi"
+      "Self-improvement",
+      "Psychology"
     ]
   }
 }

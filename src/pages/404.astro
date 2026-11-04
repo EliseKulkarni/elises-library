@@ -1,12 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { SITE_NAME } from "../lib/site";
 
 const base = import.meta.env.BASE_URL;
 ---
-<Layout title="Fant ikke siden — Bokblogg">
+<Layout title={`Page not found — ${SITE_NAME}`}>
   <div class="not-found">
-    <h1 class="page-title">Denne siden finnes ikke.</h1>
-    <p class="page-lead">Kanskje lenken er feilstavet, eller så har boken fått en ny adresse.</p>
-    <a class="action" href={base}>Gå til alle bøkene</a>
+    <h1 class="page-title">This page doesn’t exist.</h1>
+    <p class="page-lead">The link may be misspelled, or the book may have moved to a new address.</p>
+    <a class="action" href={base}>Go to all books</a>
   </div>
 </Layout>

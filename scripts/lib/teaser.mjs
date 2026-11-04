@@ -42,7 +42,7 @@ async function callClaude(markdown, apiKey) {
       messages: [
         {
           role: "user",
-          content: `Skriv en kort, fengende teaser (maks to setninger, på norsk) for denne bokanmeldelsen. Ikke avslør konklusjonen. Svar kun med teaseren, ingen anførselstegn eller forklaring:\n\n${markdown.slice(0, 3000)}`,
+          content: `Write a short, catchy teaser (two sentences at most, in the same language as the review) for this book review. Don't reveal the conclusion. Reply with only the teaser, no quotation marks or explanation:\n\n${markdown.slice(0, 3000)}`,
         },
       ],
     }),

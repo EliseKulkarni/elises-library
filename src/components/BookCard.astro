@@ -8,7 +8,7 @@ interface Props {
 // Én bok i hylla: omslaget er bildet, teksten under er tittel, bok/forfatter og karakter.
 const { book } = Astro.props;
 const base = import.meta.env.BASE_URL;
-const href = `${base}bok/${book.id}/`;
+const href = `${base}book/${book.id}/`;
 const { title, headline, author, rating, coverUrl, essensen, tags, status, dateAdded } = book.data;
 ---
 <li
@@ -31,8 +31,8 @@ const { title, headline, author, rating, coverUrl, essensen, tags, status, dateA
     <h3 class="shelf-title">{displayTitle(book)}</h3>
   </a>
   <p class="shelf-meta">
-    <span class="shelf-book">{headline && <span class="sr-only">{title} av </span>}{author ?? "ukjent forfatter"}</span>
+    <span class="shelf-book">{headline && <span class="sr-only">{title} by </span>}{author ?? "unknown author"}</span>
     {rating !== null && <span class="shelf-rating">{rating}<span class="of">/10</span></span>}
   </p>
-  {status === "80%" && <p class="shelf-status">Nesten ferdig lest</p>}
+  {status === "80%" && <p class="shelf-status">Almost finished</p>}
 </li>
